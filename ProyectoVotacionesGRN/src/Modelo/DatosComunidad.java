@@ -3,8 +3,8 @@ package Modelo;
 public class DatosComunidad {
 
 	//Atributos
-		String nombreC;
-		int totalHabitantes, porc18_25, porc26_40, porc41_65, porcmas_66, numv18_25, numv26_40, numv41_65, numvmas_66;
+		private String nombreC;
+		private int totalHabitantes, porc18_25, porc26_40, porc41_65, porcmas_66, numv18_25, numv26_40, numv41_65, numvmas_66;
 	
 	//Constructor vacío
 		public DatosComunidad() {
@@ -99,7 +99,7 @@ public class DatosComunidad {
 				return "DatosComunidad [nombreC=" + nombreC + ", totalHabitantes=" + totalHabitantes + ", porc18_25="
 						+ porc18_25 + ", porc26_40=" + porc26_40 + ", porc41_65=" + porc41_65 + ", porcmas_66=" + porcmas_66
 						+ ", numv18_25=" + numv18_25 + ", numv26_40=" + numv26_40 + ", numv41_65=" + numv41_65
-						+ ", numvmas_66=" + numvmas_66 + "]";
+						+ ", numvmas_66=" + numvmas_66 + "]"+"\n";
 			}
 
 }

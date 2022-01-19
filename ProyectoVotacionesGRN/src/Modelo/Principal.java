@@ -137,11 +137,72 @@ public class Principal {
 					}
 		}
 		
+	//Método para crear los hilos
+		public int crearHilos(ArrayList <DatosComunidad> datosComunidades, ArrayList <String> nombresC, Urna urna) {
+			
+			//Variable para saber el total de hilos que se van a crear;
+			int totalV = 0;
+			
+			try {
+				
+				for(int i = 0;i<datosComunidades.size();i++) {
+					//Creamos los votantes de 18 a 25 años
+						for(int j=0;j<datosComunidades.get(i).getNumv18_25();j++) {
+							Votante vot = new Votante(datosComunidades.get(i).getNombreC(), "18_25",urna);
+							vot.start();
+							totalV ++;
+						}
+					//Creamos los votantes de 26 a 40 años
+						for(int j=0;j<datosComunidades.get(i).getNumv26_40();j++) {
+							Votante vot = new Votante(datosComunidades.get(i).getNombreC(), "26_40",urna);
+							vot.start();
+							totalV ++;
+						}
+					//Creamos los votantes de 41 a 65 años
+						for(int j=0;j<datosComunidades.get(i).getNumv41_65();j++) {
+							Votante vot = new Votante(datosComunidades.get(i).getNombreC(), "41_65",urna);
+							vot.start();
+							totalV ++;
+						}
+					//Creamos los votantes de más de 66 años
+						for(int j=0;j<datosComunidades.get(i).getNumvmas_66();j++) {
+							Votante vot = new Votante(datosComunidades.get(i).getNombreC(), "mas_66",urna);
+							vot.start();
+							totalV ++;
+						}
+				}
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return totalV;
+		}
+		
+	//Obetener todos los nombres de las comunidades autónomas
+		public ArrayList <String> nombresComunidades(ArrayList<DatosComunidad> datosComunidades) {
+			ArrayList <String> nombres = new ArrayList<String>();
+			
+				try {
+					
+					for(int i = 0; i<datosComunidades.size();i++) {
+						nombres.add(datosComunidades.get(i).getNombreC());
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			return nombres;
+		}
+		
 		
 	//Main
 		public static void main (String[]args) {
 			//Variables && Objetos
+				int totalV;
+				
+				String [][] datosEscrutinio = new String [20][17];
 				ArrayList <DatosComunidad> datosComunidades = new ArrayList<DatosComunidad>();
+				ArrayList <String> nombresC = new ArrayList<String>();
 				Principal p = new Principal();
 				
 				Connection cn = null;
@@ -153,9 +214,26 @@ public class Principal {
 							datosComunidades = p.obtenerDatosCenso(cn);
 						//Calculamos los votantes
 							p.calcularVotantes(datosComunidades);
+						//Obetener los nombres de las comunidades
+							nombresC = p.nombresComunidades(datosComunidades);
+						//Creación de la urna
+							Urna urna = new Urna(nombresC);
+						//Crear los hilos
+							totalV = p.crearHilos(datosComunidades, nombresC, urna);
+						//Crear hilo escruitinio
+							Escrutinio esc = new Escrutinio(totalV,urna);
+							esc.start();
+							esc.join();
+							datosEscrutinio = esc.getDatosGen();
 							
-						System.out.println(datosComunidades.toString());
-						
+							System.out.println(datosComunidades.toString());
+							for(int i = 0; i<20;i++) {
+								for(int j = 0; j < 17; j++) {
+									System.out.print(datosEscrutinio[i][j].toString()+"--");
+								}
+								System.out.println();
+							}
+						System.out.println(totalV);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}finally {
