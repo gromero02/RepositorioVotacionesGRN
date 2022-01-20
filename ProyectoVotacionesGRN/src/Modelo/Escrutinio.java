@@ -17,11 +17,18 @@ public class Escrutinio extends Thread{
 		public void run() {
 			try {
 				//recuperar los datos de las votaciones
-				for(int i=0;i<totalV;i++) {
+				for(int i=0;i<totalV/5;i++) {
 				
 					datosGen = urna.getDatosGen();
-				//Una vez recupera los datos duerme 5 segundos
-					//sleep();	
+				
+				}
+				for(int u = 0; u<20;u++) {
+					for(int v = 0; v < 17; v++) {
+						System.out.print(datosGen[u][v].toString()+"--");
+					}
+					System.out.println();
+					//Una vez recupera los datos duerme 5 segundos
+						sleep(200);	
 				}
 					
 			} catch (Exception e) {
@@ -33,8 +40,6 @@ public class Escrutinio extends Thread{
 		public String[][] getDatosGen() {
 			return datosGen;
 		}
-
-		
-		
+	
 	
 }

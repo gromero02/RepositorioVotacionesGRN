@@ -24,9 +24,8 @@ public class Votante extends Thread{
 				//Crear número aleatorio
 				valeatorio = 0+(int)(Math.random()*101);
 				voto = resolverVoto(valeatorio);
-				
-			//Una vez vota, duerme 1 segundo	
-			sleep(1000);
+				//Una vez vota, duerme 1 segundo	
+				sleep(2000);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -100,7 +99,7 @@ public class Votante extends Thread{
 							//Llamo al método para contabilizar el voto
 								urna.votacion_mas_66(nombreComunidad, vt);
 							}
-							
+								
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
