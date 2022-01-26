@@ -6,8 +6,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import jdk.nashorn.api.tree.ForInLoopTree;
-
 public class Principal {
 
 	// Conexión a la base de datos
@@ -52,7 +50,7 @@ public class Principal {
 
 	}
 
-	// Método para obtener todos los datos del censo el cuçal se encuentra en la
+	// Método para obtener todos los datos del censo el cual se encuentra en la
 	// base de datos
 	public ArrayList<DatosComunidad> obtenerDatosCenso(Connection cn) {
 		// Variables
@@ -316,7 +314,7 @@ public class Principal {
 	}
 
 	// Método para comprobar si existe la votacion según el nombre
-	public long existeVotacion(Connection cn, String nombreComunidad) throws SQLException {
+	public long existeEscrutinioIndividual(Connection cn, String nombreComunidad) throws SQLException {
 
 		// Variables && Objetos
 		long idV = 0;
@@ -360,7 +358,7 @@ public class Principal {
 //DATOS ESCRUTINIO POR RANGOS
 
 	// Insert del escrutinio por rangos
-	public void insertEscrutinioRango(Connection cn, ArrayList<String> esRangos) throws SQLException {
+	public void insertEscrutinioRangosyG(Connection cn, ArrayList<String> esRangos) throws SQLException {
 		// Variables && Objetos
 		String consulta = "INSERT INTO ESCRUTINIO_RANGOS_Y_FINAL (R_18_25, R_26_40, R_41_65, R_MAS_66, GANADOR_GENERAL) VALUES (?,?,?,?,?)";
 		PreparedStatement pe = null;
@@ -394,7 +392,7 @@ public class Principal {
 	}
 
 	// Actualización de los datos del escrutinio por rangos
-	public void updateEscrutinioRangos(Connection cn, ArrayList<String> esRangos) {
+	public void updateEscrutinioRangosyG(Connection cn, ArrayList<String> esRangos) {
 		// Variables && Objetos
 		String consulta = "UPDATE ESCRUTINIO_RANGOS_Y_FINAL SET R_18_25=?,R_26_40=?, R_41_65=?, R_MAS_66=?, GANADOR_GENERAL=?";
 		PreparedStatement pe = null;
@@ -466,337 +464,6 @@ public class Principal {
 		}
 		return idV;
 	}
-
-	// Ganadores según los rangos y ganador final de españa
-	public ArrayList<String> generarEsRangoEsFinal(String[][] datosEscrutinio) {
-		// Variables y Objetos
-		String ganadorR = "";// Variable que almacena el ganador en cada iteración del primer for
-		int vtMaxR,vtMaxRAux; // Variable que almacena el partido con más votos segun el rango
-		int gnR = 0; // Variable que almacena la posicion del partido con más votos por rango
-		int votosPP = 0, votosPSOE = 0, votosPODEMOS = 0, votosVOX = 0; // Son los contadores que almacenan los votos de
-																		// cada partido por rango
-
-		String ganadorF = "";// Variable que almacena el ganador final de españa
-		int vtMaxF,vtMaxFAux; // Variable que almacena el partido con más votos
-		int gnF = 0; // Variable que almacena la posicion del partido con más votos
-		int ppF = 0, psoeF = 0, podemosF = 0, voxF = 0; // Estas variables van a contener el recuento para sacar el
-														// ganador final i no se reinician
-
-		int[] recuento = new int[8]; // Almacena los valores de los contadores de los votos
-		ArrayList<String> rangos = new ArrayList<String>(); // Almacena los distintos rangos
-		ArrayList<String> resultado = new ArrayList<String>(); // Es el array que se retorna, el cual almacena en forma
-																// de string los ganadores
-
-		// En el array rangos, guardo los distintos rangos para después hacer la
-		// condicional
-
-		rangos.add("18_25");
-		rangos.add("26_40");
-		rangos.add("41_65");
-		rangos.add("mas_66");
-
-		// El array tendra 4 iteraciones, una por cada rango de edad
-		for (int v = 0; v < rangos.size(); v++) {
-
-			// Con este for recorro las columnas del array
-			for (int i = 0; i < 17; i++) {
-				// Condición segun los rangos
-
-				if (datosEscrutinio[0][i].equals("PP_" + rangos.get(v))) {
-					for (int j = 1; j < 20; j++) {
-						votosPP = votosPP + Integer.parseInt(datosEscrutinio[j][i]);// Votos por rango
-						ppF = ppF + Integer.parseInt(datosEscrutinio[j][i]);// Votos generales
-						recuento[0] = votosPP;
-						recuento[4] = ppF;
-					}
-				}
-
-				if (datosEscrutinio[0][i].equals("PSOE_" + rangos.get(v))) {
-					for (int j = 1; j < 20; j++) {
-						votosPSOE = votosPSOE + Integer.parseInt(datosEscrutinio[j][i]);// Votos por rango
-						psoeF = psoeF + Integer.parseInt(datosEscrutinio[j][i]);// Votos generales
-						recuento[1] = votosPSOE;
-						recuento[5] = psoeF;
-					}
-				}
-
-				if (datosEscrutinio[0][i].equals("PODEMOS_" + rangos.get(v))) {
-					for (int j = 1; j < 20; j++) {
-						votosPODEMOS = votosPODEMOS + Integer.parseInt(datosEscrutinio[j][i]);// Votos por rango
-						podemosF = podemosF + Integer.parseInt(datosEscrutinio[j][i]);// Votos generales
-						recuento[2] = votosPODEMOS;
-						recuento[6] = podemosF;
-					}
-				}
-
-				if (datosEscrutinio[0][i].equals("VOX_" + rangos.get(v))) {
-					for (int j = 1; j < 20; j++) {
-						votosVOX = votosVOX + Integer.parseInt(datosEscrutinio[j][i]);// Votos por rango
-						voxF = voxF + Integer.parseInt(datosEscrutinio[j][i]);// Votos generales
-						recuento[3] = votosVOX;
-						recuento[7] = voxF;
-					}
-				}
-			}
-
-			// Una vez hecho el recuento, tengo que sacar el máximo de votos por rango
-			vtMaxR = recuento[0];
-
-			for (int i = 0; i < 4; i++) {
-				// Por rango
-
-				if (vtMaxR < recuento[i]) {
-					vtMaxR = recuento[i];
-					gnR = i;
-					
-					// Condicionamos ya que queremos saber el partido ganador por rango
-					if (v == 0) {
-						ganadorR = "PP";
-					} else if (v == 1) {
-						ganadorR = "PSOE";
-					} else if (v == 2) {
-						ganadorR = "PODEMOS";
-					} else if (v == 3) {
-						ganadorR = "VOX";
-					}
-					
-				}else
-					//Desempate
-					if(recuento[v]==vtMaxR && v>0) {
-					
-					vtMaxRAux = 1+(int) (Math.random()*2);
-					
-					if(vtMaxRAux == 1) {
-						recuento[v]=recuento[v]+1;
-						// Condicionamos ya que queremos saber el partido ganador por rango
-						if (v == 0) {
-							ganadorR = "PP";
-						} else if (v == 1) {
-							ganadorR = "PSOE";
-						} else if (v == 2) {
-							ganadorR = "PODEMOS";
-						} else if (v == 3) {
-							ganadorR = "VOX";
-						}
-						
-					}else {
-						recuento[gnR]=recuento[gnR]+1;
-						// Condicionamos ya que queremos saber el partido ganador por rango
-						if (v == 0) {
-							ganadorR = "PP";
-						} else if (v == 1) {
-							ganadorR = "PSOE";
-						} else if (v == 2) {
-							ganadorR = "PODEMOS";
-						} else if (v == 3) {
-							ganadorR = "VOX";
-						}
-					}
-				}
-			}
-
-			// Añado el ganador por rango al array de resultado
-			resultado.add(ganadorR);
-
-			// Reiniciamos las variables que cuentan los votos
-			votosPP = 0;
-			votosPSOE = 0;
-			votosPODEMOS = 0;
-			votosVOX = 0;
-
-		} // fin primer for
-
-		// Condicionamos ya que queremos saber el partido ganador
-		// Maximos votos generales
-		vtMaxF = recuento[4];
-
-		for (int p = 4; p < 8; p++) {
-		
-			if (vtMaxF < recuento[p]) {
-				vtMaxF = recuento[p];
-				gnF = p;
-				
-				if (p == 4) {
-					ganadorF = "PP";
-				} else if (p == 5) {
-					ganadorF = "PSOE";
-				} else if (p == 6) {
-					ganadorF = "PODEMOS";
-				} else if (p == 7) {
-					ganadorF = "VOX";
-				}
-				
-			}else
-				//Desempate
-				if(recuento[p]==vtMaxF && p>4) {
-				
-				vtMaxFAux = 1+(int) (Math.random()*2);
-				
-				if(vtMaxFAux == 1) {
-					recuento[p]=recuento[p]+1;
-					// Condicionamos ya que queremos saber el partido ganador por rango
-					if (p == 4) {
-						ganadorF = "PP";
-					} else if (p == 5) {
-						ganadorF = "PSOE";
-					} else if (p == 6) {
-						ganadorF = "PODEMOS";
-					} else if (p == 7) {
-						ganadorF = "VOX";
-					}
-					
-				}else {
-					recuento[gnF]=recuento[gnF]+1;
-					// Condicionamos ya que queremos saber el partido ganador por rango
-					if (p == 4) {
-						ganadorF = "PP";
-					} else if (p == 5) {
-						ganadorF = "PSOE";
-					} else if (p == 6) {
-						ganadorF = "PODEMOS";
-					} else if (p == 7) {
-						ganadorF = "VOX";
-					}
-				}
-			}
-		}
-
-		
-
-		// Añado el ganador final en el ultimo campo del array resultado
-		resultado.add(ganadorF);
-
-		return resultado;
-	}
-
-	//Ganador según la comunidad autónoma
-	public ArrayList <String> generarEsComunidad(String [][] datosEscrutinio){
-		//Variables && Objetos
-		String ganadorCom = "";// Variable que almacena el ganador en cada iteración del primer for
-		int vtMaxCom, vtMaxCaux; // Variable que almacena el partido con más votos de cada comunidad
-		int gnC = 0, gnCaux = 0; // Variable que almacena la posicion del partido con más votos por comunidad
-		int votosPP = 0, votosPSOE = 0, votosPODEMOS = 0, votosVOX = 0; // Son los contadores que almacenan los votos de
-																		// cada partido por comunidad
-		
-		ArrayList <String> ganadoresCom = new ArrayList<String>();//Array que va a contener los ganadores
-		int [] recuento = new int[4]; // Almacena los valores de los contadores de los votos
-		
-			try {
-				//Recorre las filas desde la 1 hasta la 19
-				for(int i = 1; i<20;i++){
-					
-					//Recorre las columnas desde la 1 hasta la 16
-					for(int j = 1;j <17;j++) {
-						
-						//Votos al PP
-						if(datosEscrutinio[0][j].equals("PP_18_25") || datosEscrutinio[0][j].equals("PP_26_40") ||
-								datosEscrutinio[0][j].equals("PP_41_65") || datosEscrutinio[0][j].equals("PP_mas_66")) {
-							
-							//Incrementamos la variable de PP
-								votosPP = votosPP + Integer.parseInt(datosEscrutinio[i][j]);
-								recuento[0] = votosPP;
-						}else 
-							//Votos al PSOE
-							if(datosEscrutinio[0][j].equals("PSOE_18_25") || datosEscrutinio[0][j].equals("PSOE_26_40") ||
-									datosEscrutinio[0][j].equals("PSOE_41_65") || datosEscrutinio[0][j].equals("PSOE_mas_66")) {
-								
-								//Incrementamos la variable de PSOE
-									votosPSOE = votosPSOE + Integer.parseInt(datosEscrutinio[i][j]);
-									recuento[1] = votosPSOE;
-							}else 
-								//Votos a PODEMOS
-								if(datosEscrutinio[0][j].equals("PODEMOS_18_25") || datosEscrutinio[0][j].equals("PODEMOS_26_40") ||
-										datosEscrutinio[0][j].equals("PODEMOS_41_65") || datosEscrutinio[0][j].equals("PODEMOS_mas_66")) {
-									
-									//Incrementamos la variable de PODEMOS
-										votosPODEMOS = votosPODEMOS+ Integer.parseInt(datosEscrutinio[i][j]);
-										recuento[2] = votosPODEMOS;
-								}else 
-									//Votos a VOX
-									if(datosEscrutinio[0][j].equals("VOX_18_25") || datosEscrutinio[0][j].equals("VOX_26_40") ||
-											datosEscrutinio[0][j].equals("VOX_41_65") || datosEscrutinio[0][j].equals("VOX_mas_66")) {
-										
-										//Incrementamos la variable de VOX
-											votosVOX = votosVOX+ Integer.parseInt(datosEscrutinio[i][j]);
-											recuento[3] = votosVOX;
-									}
-						
-					}
-					
-					
-					//Una vez realizado el recuento, procedemos a sacar el ganador
-					vtMaxCom = recuento[0];
-
-					for (int v = 0; v < recuento.length; v++) {
-
-						if (recuento[v] > vtMaxCom) {
-							vtMaxCom = recuento[v];
-							
-							if (v == 0) {
-								ganadorCom = "PP";
-							} else if (v == 1) {
-								ganadorCom = "PSOE";
-							} else if (v == 2) {
-								ganadorCom = "PODEMOS";
-							} else if (v == 3) {
-								ganadorCom = "VOX";
-							}
-							
-							gnC=v;
-							
-						}else if(recuento[v]==vtMaxCom && v>0) {
-							
-							vtMaxCaux = 1+(int) (Math.random()*2);
-							
-							if(vtMaxCaux == 1) {
-								recuento[v]=recuento[v]+1;
-								
-								if (v == 0) {
-									ganadorCom = "PP";
-								} else if (v == 1) {
-									ganadorCom = "PSOE";
-								} else if (v == 2) {
-									ganadorCom = "PODEMOS";
-								} else if (v == 3) {
-									ganadorCom = "VOX";
-								}
-								
-							}else {
-								recuento[gnC]=recuento[gnC]+1;
-								
-								if (v == 0) {
-									ganadorCom = "PP";
-								} else if (v == 1) {
-									ganadorCom = "PSOE";
-								} else if (v == 2) {
-									ganadorCom = "PODEMOS";
-								} else if (v == 3) {
-									ganadorCom = "VOX";
-								}
-							}
-						}
-					}
-
-					// Añado el ganador final en el ultimo campo del array resultado
-					ganadoresCom.add(ganadorCom);
-					
-					//Restablecemos a 0 los contadores de votos y el array de recuento
-					votosPP = 0;
-					votosPSOE = 0;
-					votosPODEMOS = 0;
-					votosVOX = 0;
-					recuento[0]=0; recuento[1]=0; recuento[2]=0; recuento[3]=0;
-				}
-				
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		
-		return ganadoresCom;
-	}
-		
-	
 	
 	// INSERT MASIVO
 	public void insertMasivo(Connection cn, String[][] datosEscrutinio, ArrayList<String> esRangos, ArrayList<String> esComunidades)
@@ -806,7 +473,7 @@ public class Principal {
 			// Gestión de los datos de la tabla votacion
 			for (int i = 1; i < 20; i++) {
 				// Si no existe se ejecuta el insert
-				if (existeVotacion(cn, datosEscrutinio[i][0]) == 0) {
+				if (existeEscrutinioIndividual(cn, datosEscrutinio[i][0]) == 0) {
 					insertEscrutinioIndividual(cn, datosEscrutinio, i, esComunidades.get(i-1));
 					System.out.println("INSERTADO");
 				} else {
@@ -818,10 +485,10 @@ public class Principal {
 
 			// Gestión de los datos de la tabla escrutinio_rangos
 			if (existeEscrutinioRangosyG(cn) == 0) {
-				insertEscrutinioRango(cn, esRangos);
+				insertEscrutinioRangosyG(cn, esRangos);
 				System.out.println("INSERTADO ESCRUTINIO POR RANGO");
 			} else {
-				updateEscrutinioRangos(cn, esRangos);
+				updateEscrutinioRangosyG(cn, esRangos);
 				System.out.println("ACTUALIZADO ESCRUTINIO POR RANGO");
 			}
 
@@ -839,8 +506,10 @@ public class Principal {
 		ArrayList<DatosComunidad> datosComunidades = new ArrayList<DatosComunidad>();
 		ArrayList<String> nombresC = new ArrayList<String>();
 		ArrayList<String> esRangos = new ArrayList<String>();
+		ArrayList<String> esRangosTOTAL = new ArrayList<String>();
 		ArrayList<String> esComunidades = new ArrayList<String>();
-
+		String[][] esComunidadesTOTAL = new String[20][6];
+		
 		Principal p = new Principal();
 
 		Connection cn = null;
@@ -860,17 +529,20 @@ public class Principal {
 			totalV = p.crearHilos(datosComunidades, nombresC, urna);
 
 			// Crear hilo escruitinio
-			Escrutinio esc = new Escrutinio(totalV, urna);
+			Escrutinio esc = new Escrutinio(totalV, urna, nombresC);
 			esc.start();
 			esc.join();
 			datosEscrutinio = esc.getDatosGen();
-
-			// Obtener resultados segun los rangos y ganador de España
-			esRangos = p.generarEsRangoEsFinal(datosEscrutinio);
-
-			//Obtener ganador según la comunidad autónoma
-			esComunidades = p.generarEsComunidad(datosEscrutinio);
 			
+			//Recuperamos ganadores del hilo escrutinio
+			esRangos = esc.getGanadores_Rangos_esGanadorFinal();
+			esComunidades = esc.getGanadores_PorComunidad();
+			
+			//Recuperamos los ganadores y sus votos, según los rangos y a nivel España
+			esRangosTOTAL = esc.getRecuentoRangos_ESP();
+			
+			//Recuperamos los ganadores y sus votos, según cada comunidad autonoma
+			esComunidadesTOTAL = esc.getRecuentoComunidades();
 			
 			// Realiza el insert de todo los datos del escrutinio, en la tabla votacion
 			p.insertMasivo(cn, datosEscrutinio, esRangos, esComunidades);
@@ -885,7 +557,16 @@ public class Principal {
 			System.out.println("mas_66 años " + esRangos.get(3));
 			System.out.println("ganador elecciones: " + esRangos.get(4));
 			System.out.println("*************************************");
+			System.out.println(esRangosTOTAL);
+			System.out.println();
 
+			for (int u = 0; u < 20; u++) {
+				for (int v = 0; v < 6; v++) {
+					System.out.print(esComunidadesTOTAL[u][v].toString() + "--");
+				}
+				System.out.println();
+			
+			}
 			System.out.println(totalV);
 		} catch (Exception e) {
 			e.printStackTrace();
