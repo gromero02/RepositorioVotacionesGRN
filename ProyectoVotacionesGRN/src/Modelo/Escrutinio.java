@@ -39,7 +39,7 @@ public class Escrutinio extends Thread {
 				}
 				System.out.println();
 				// Una vez recupera los datos duerme 5 segundos
-				sleep(200);
+				sleep(100);
 			}
 			
 			this.ganadores_Rangos_esGanadorFinal = this.generarEsRangoEsFinal(this.datosGen);
@@ -183,10 +183,10 @@ public class Escrutinio extends Thread {
 			}
 			
 			//Almacenar en resultado de los votos
-			this.recuentoRangos_ESP.add(Integer.toString(votosPP));
-			this.recuentoRangos_ESP.add(Integer.toString(votosPSOE));
-			this.recuentoRangos_ESP.add(Integer.toString(votosPODEMOS));
-			this.recuentoRangos_ESP.add(Integer.toString(votosVOX));
+			this.recuentoRangos_ESP.add(Integer.toString(recuento[0]));
+			this.recuentoRangos_ESP.add(Integer.toString(recuento[1]));
+			this.recuentoRangos_ESP.add(Integer.toString(recuento[2]));
+			this.recuentoRangos_ESP.add(Integer.toString(recuento[3]));
 			this.recuentoRangos_ESP.add(ganadorR);
 
 			// Añado el ganador por rango al array de resultado
@@ -233,10 +233,10 @@ public class Escrutinio extends Thread {
 		}
 
 		//Almacenar en resultado de los votos del ganador final
-		this.recuentoRangos_ESP.add(Integer.toString(ppF));
-		this.recuentoRangos_ESP.add(Integer.toString(psoeF));
-		this.recuentoRangos_ESP.add(Integer.toString(podemosF));
-		this.recuentoRangos_ESP.add(Integer.toString(voxF));
+		this.recuentoRangos_ESP.add(Integer.toString(recuento[4]));
+		this.recuentoRangos_ESP.add(Integer.toString(recuento[5]));
+		this.recuentoRangos_ESP.add(Integer.toString(recuento[6]));
+		this.recuentoRangos_ESP.add(Integer.toString(recuento[7]));
 		this.recuentoRangos_ESP.add(ganadorF);
 		
 		// Añado el ganador final en el ultimo campo del array resultado
@@ -327,7 +327,7 @@ public class Escrutinio extends Thread {
 						} else {
 							recuento[gnC] = recuento[gnC] + 1;
 
-							ganadorCom = this.sacarGanador(v);
+							ganadorCom = this.sacarGanador(gnC);
 						}
 					}
 				}
@@ -351,6 +351,8 @@ public class Escrutinio extends Thread {
 				recuento[1] = 0;
 				recuento[2] = 0;
 				recuento[3] = 0;
+				
+				
 			}
 
 		} catch (Exception e) {

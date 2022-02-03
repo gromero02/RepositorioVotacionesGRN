@@ -5,9 +5,8 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Properties;
-
 public class Principal {
-
+	
 	// Conexión a la base de datos
 	public Connection createConnection() throws FileNotFoundException, IOException, ClassNotFoundException {
 		Connection cn = null;
@@ -504,11 +503,12 @@ public class Principal {
 
 		String[][] datosEscrutinio = new String[20][17];
 		ArrayList<DatosComunidad> datosComunidades = new ArrayList<DatosComunidad>();
-		ArrayList<String> nombresC = new ArrayList<String>();
 		ArrayList<String> esRangos = new ArrayList<String>();
-		ArrayList<String> esRangosTOTAL = new ArrayList<String>();
 		ArrayList<String> esComunidades = new ArrayList<String>();
+		ArrayList<String> esRangosTOTAL = new ArrayList<String>();
 		String[][] esComunidadesTOTAL = new String[20][6];
+		ArrayList<String> nombresC = new ArrayList<String>();
+		
 		
 		Principal p = new Principal();
 
@@ -523,13 +523,14 @@ public class Principal {
 			p.calcularVotantes(datosComunidades);
 			// Obetener los nombres de las comunidades
 			nombresC = p.nombresComunidades(datosComunidades);
+			
 			// Creación de la urna
 			Urna urna = new Urna(nombresC);
 			// Crear los hilos
 			totalV = p.crearHilos(datosComunidades, nombresC, urna);
 
 			// Crear hilo escruitinio
-			Escrutinio esc = new Escrutinio(totalV, urna, nombresC);
+			Escrutinio esc = new Escrutinio(totalV, urna,nombresC);
 			esc.start();
 			esc.join();
 			datosEscrutinio = esc.getDatosGen();
@@ -547,6 +548,7 @@ public class Principal {
 			// Realiza el insert de todo los datos del escrutinio, en la tabla votacion
 			p.insertMasivo(cn, datosEscrutinio, esRangos, esComunidades);
 
+			
 			// Imprimir datos
 			// System.out.println(datosComunidades.toString());
 			System.out.println("*************************************");
