@@ -49,8 +49,7 @@ public class Principal {
 
 	}
 
-	// Método para obtener todos los datos del censo el cual se encuentra en la
-	// base de datos
+	// Método para obtener todos los datos del censo el cual se encuentra en la base de datos
 	public ArrayList<DatosComunidad> obtenerDatosCenso(Connection cn) {
 		// Variables
 		String consulta = "SELECT NOMBRE_COMUNIDAD, TOTAL_HABITANTES, RANGO_18_25, RANGO_26_40, RANGO_41_65, RANGO_MAS_66 FROM PORCENTAJES_RANGOEDAD";
@@ -493,91 +492,6 @@ public class Principal {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	// Main
-	public static void main(String[] args) {
-		// Variables && Objetos
-		int totalV;
-
-		String[][] datosEscrutinio = new String[20][17];
-		ArrayList<DatosComunidad> datosComunidades = new ArrayList<DatosComunidad>();
-		ArrayList<String> esRangos = new ArrayList<String>();
-		ArrayList<String> esComunidades = new ArrayList<String>();
-		ArrayList<String> esRangosTOTAL = new ArrayList<String>();
-		String[][] esComunidadesTOTAL = new String[20][6];
-		ArrayList<String> nombresC = new ArrayList<String>();
-		
-		
-		Principal p = new Principal();
-
-		Connection cn = null;
-
-		try {
-			// Conexión
-			cn = p.createConnection();
-			// Recuperamos datos del censo, llamando al método "obtenerDatosCenso"
-			datosComunidades = p.obtenerDatosCenso(cn);
-			// Calculamos los votantes
-			p.calcularVotantes(datosComunidades);
-			// Obetener los nombres de las comunidades
-			nombresC = p.nombresComunidades(datosComunidades);
-			
-			// Creación de la urna
-			Urna urna = new Urna(nombresC);
-			// Crear los hilos
-			totalV = p.crearHilos(datosComunidades, nombresC, urna);
-
-			// Crear hilo escruitinio
-			Escrutinio esc = new Escrutinio(totalV, urna,nombresC);
-			esc.start();
-			esc.join();
-			datosEscrutinio = esc.getDatosGen();
-			
-			//Recuperamos ganadores del hilo escrutinio
-			esRangos = esc.getGanadores_Rangos_esGanadorFinal();
-			esComunidades = esc.getGanadores_PorComunidad();
-			
-			//Recuperamos los ganadores y sus votos, según los rangos y a nivel España
-			esRangosTOTAL = esc.getRecuentoRangos_ESP();
-			
-			//Recuperamos los ganadores y sus votos, según cada comunidad autonoma
-			esComunidadesTOTAL = esc.getRecuentoComunidades();
-			
-			// Realiza el insert de todo los datos del escrutinio, en la tabla votacion
-			p.insertMasivo(cn, datosEscrutinio, esRangos, esComunidades);
-
-			
-			// Imprimir datos
-			// System.out.println(datosComunidades.toString());
-			System.out.println("*************************************");
-			System.out.println("	   Resultado segun rango ");
-			System.out.println("18_25 años " + esRangos.get(0));
-			System.out.println("26_40 años " + esRangos.get(1));
-			System.out.println("41_65 años " + esRangos.get(2));
-			System.out.println("mas_66 años " + esRangos.get(3));
-			System.out.println("ganador elecciones: " + esRangos.get(4));
-			System.out.println("*************************************");
-			System.out.println(esRangosTOTAL);
-			System.out.println();
-
-			for (int u = 0; u < 20; u++) {
-				for (int v = 0; v < 6; v++) {
-					System.out.print(esComunidadesTOTAL[u][v].toString() + "--");
-				}
-				System.out.println();
-			
-			}
-			System.out.println(totalV);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				p.disconnect(cn);
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 		}
 	}
 

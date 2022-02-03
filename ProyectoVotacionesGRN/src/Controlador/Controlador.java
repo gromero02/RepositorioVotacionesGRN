@@ -36,28 +36,25 @@ import Modelo.Urna;
 import Vista.InterfazVotaciones;
 
 public class Controlador implements ActionListener {
-
-	private static final long ESPERA = 10 * 1000;
-	private boolean bandera = false;
-	InterfazVotaciones iv = new InterfazVotaciones();
 	
 	// Variables && Objetos
 	
-	private int totalV;
-
-	private String[][] datosEscrutinio = new String[20][17];
-	private ArrayList<DatosComunidad> datosComunidades = new ArrayList<DatosComunidad>();
-	private ArrayList<String> esRangos = new ArrayList<String>();
-	private ArrayList<String> esComunidades = new ArrayList<String>();
-	private ArrayList<String> esRangosTOTAL = new ArrayList<String>();
-	private String[][] esComunidadesTOTAL = new String[20][6];
-	private ArrayList<String> nombresC = new ArrayList<String>();
+		private int totalV;
 	
-	Principal p = new Principal();
-	private int rang =0;
-	private String rangoEdad="";
-	Connection cn = null;
-
+		private String[][] datosEscrutinio = new String[20][17];
+		private ArrayList<DatosComunidad> datosComunidades = new ArrayList<DatosComunidad>();
+		private ArrayList<String> esRangos = new ArrayList<String>();
+		private ArrayList<String> esComunidades = new ArrayList<String>();
+		private ArrayList<String> esRangosTOTAL = new ArrayList<String>();
+		private String[][] esComunidadesTOTAL = new String[20][6];
+		private ArrayList<String> nombresC = new ArrayList<String>();
+		
+		InterfazVotaciones iv = new InterfazVotaciones();
+		Principal p = new Principal();
+		private int rang =0;
+		private String rangoEdad="";
+		Connection cn = null;
+		
 	public Controlador(InterfazVotaciones frame) {
 
 		this.iv = frame;
@@ -87,6 +84,7 @@ public class Controlador implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 
 		// Acciones de los botones
+		//Botón iniciar votaciones
 		if (e.getSource() == iv.botonIniciarVotacion) {
 			iv.tituloPanelVotacion.setVisible(true);
 			iv.gifLoading.setVisible(true);
@@ -166,13 +164,14 @@ public class Controlador implements ActionListener {
 			
 			//Ver el botón mostrar
 			iv.botonMostrarPanelRs.setVisible(true);
-				
+		
+			//Botón mostrar, para acceder al panel de mostrar resultados
 		}else if(e.getSource() == iv.botonMostrarPanelRs) {
 			iv.panelinicio.setVisible(false);
 			iv.panelMostrar.setVisible(true);
 			this.rellenarCBComunidades();
 			
-			
+			//Botón que muestra el panel de los resultados de españa
 		}else if(e.getSource() == iv.botonRespaña) {
 
 			iv.panelMostrar.setVisible(false);
@@ -184,10 +183,12 @@ public class Controlador implements ActionListener {
 			this.iv.fotoPresidenteREspaña.setVisible(true);
 			this.resultadoEspaña();
 			
+			//Botón que muestra el panel de resultados por comunidad
 		}else if(e.getSource() == iv.botonRcom) {
 			iv.panelMostrar.setVisible(false);
 			iv.panelRcom.setVisible(true);
 			
+			//Botón que muestra los resultados por comunidad
 		}else if(e.getSource() == iv.botonMostrarPanelRcom) {
 		
 			if(!iv.comboBoxCom.getSelectedItem().toString().equals("")) {
@@ -195,33 +196,46 @@ public class Controlador implements ActionListener {
 				this.resultadoCom();	
 				
 			}
+			//Boton que lleva al panel de mostrar
 		}else if(e.getSource() == iv.botonatrasPREsp) {
 			iv.panelMostrar.setVisible(true);
 			iv.panelRespaña.setVisible(false);
 			
+			//Boton que lleva al panel de mostrar
 		}else if(e.getSource() == iv.botonatrasPRCom) {
 			iv.panelMostrar.setVisible(true);
 			iv.panelRcom.setVisible(false);
+			
+			//Botón que muestra el panel de resultados por rango
 		}else if(e.getSource() == iv.botonRRang) {
 			iv.panelMostrar.setVisible(false);
 			iv.panelRRang.setVisible(true);
 			
+			//Botón que muestra los resultados del rango entre 18 y 25 años
 		}else if(e.getSource() == iv.botonRRangFiltro18_25) {
 			this.rang = 1;
 			this.rangoEdad = " personas entre 18 y 25 años";
 			this.resultadoRangos();
+			
+			//Botón que muestra los resultados del rango entre 26 y 40 años
 		}else if(e.getSource() == iv.botonRRangFiltro26_40) {
 			this.rang = 2;
 			this.rangoEdad = "personas entre 26 y 40 años";
 			this.resultadoRangos();
+			
+			//Botón que muestra los resultados del rango entre 41 y 65 años
 		}else if(e.getSource() == iv.botonRRangFiltro41_65) {
 			this.rang = 3;
 			this.rangoEdad = "personas entre 41 y 65 años";
 			this.resultadoRangos();
+			
+			//Botón que muestra los resultados del rango con mas de 66 años
 		}else if(e.getSource() == iv.botonRRangFiltroMas66) {
 			this.rang = 4;
 			this.rangoEdad = "personas con más de 66 años";
 			this.resultadoRangos();
+			
+			//Boton que lleva al panel de mostrar
 		}else if(e.getSource() ==iv.botonatrasPRRang) {
 			iv.panelMostrar.setVisible(true);
 			iv.panelRRang.setVisible(false);
@@ -233,13 +247,16 @@ public class Controlador implements ActionListener {
 		public void resultadoEspaña() {
 			String ganadorE= "";
 			
+			//Recuperamos el número de votos
 			int pp = Integer.parseInt(esRangosTOTAL.get(20));
 		    int psoe = Integer.parseInt(esRangosTOTAL.get(21));
 		    int podemos = Integer.parseInt(esRangosTOTAL.get(22));
 		    int vox = Integer.parseInt(esRangosTOTAL.get(23));
 			
+		    //Recuperamos el ganador
 			ganadorE = esRangosTOTAL.get(24);
 			
+			//Según sea el ganador, cambia el logo y la foto del presidente
 			if(ganadorE.equals("PP")) {
 				iv.logoGanadorREspaña.setIcon(new ImageIcon("imgsVotaciones/iPP.png"));
 				iv.fotoPresidenteREspaña.setIcon(new ImageIcon("imgsVotaciones/pPPEsp.PNG"));
@@ -257,7 +274,8 @@ public class Controlador implements ActionListener {
 			
 			//Pintar Grafico
 			
-
+			//Rellenamos los datos del grafico
+			
 			DefaultPieDataset datosVotosE = new DefaultPieDataset();
 			
 			datosVotosE.setValue("PP \n Votos -> "+pp, pp);
@@ -270,6 +288,8 @@ public class Controlador implements ActionListener {
 					true, 
 					true, 
 					true);
+			
+			//Aplicamos estilo al grafico
 			
 			PiePlot plot = (PiePlot) iv.graficoEsp.getPlot();
 			
@@ -295,6 +315,8 @@ public class Controlador implements ActionListener {
 		}
 	
 	//PANEL RESULTADOS COMUNIDADES
+		
+		//Rellenamos el combo box de seleccion de comunidades con el nombre de estas
 		public void rellenarCBComunidades() {
 			try {
 				
@@ -319,8 +341,7 @@ public class Controlador implements ActionListener {
 				this.iv.panelGraficoCom.setVisible(true);
 			}
 			
-			
-			//Recuperar votos
+			//Recuperamos votos
 			for(int i = 1; i < 20;i++) {
 				if(this.esComunidadesTOTAL[i][0].equals(iv.comboBoxCom.getSelectedItem().toString())) {
 					comunidad=esComunidadesTOTAL[i][0];
@@ -332,6 +353,7 @@ public class Controlador implements ActionListener {
 				}
 			}
 			
+			//Según sea el ganador, cambia el logo
 			if(ganador.equals("PP")) {
 				iv.logoGanadorRcom.setIcon(new ImageIcon("imgsVotaciones/iPP.png"));
 			}else if(ganador.equals("PSOE")) {
@@ -345,7 +367,7 @@ public class Controlador implements ActionListener {
 			
 			//Pintar Grafico
 			
-
+			//Rellenamos los datos del grafico
 			DefaultCategoryDataset datosVotosCom = new DefaultCategoryDataset();
 			
 			datosVotosCom.setValue(pp, "PP \n Votos -> "+pp, "PP");
@@ -362,6 +384,7 @@ public class Controlador implements ActionListener {
 					true, 
 					false);
 			
+			//Aplicamos estilo al grafico
 			LegendTitle legend = iv.graficoCom.getLegend();
 			legend.setItemFont(new Font("Tahoma", Font.BOLD, 12));
 			
@@ -433,7 +456,7 @@ public class Controlador implements ActionListener {
 					ganador = esRangosTOTAL.get(19);
 				}
 			
-			
+			//Según sea el ganador, cambia el logo
 			if(ganador.equals("PP")) {
 				iv.logoGanadorRRang.setIcon(new ImageIcon("imgsVotaciones/iPP.png"));
 			}else if(ganador.equals("PSOE")) {
@@ -447,7 +470,7 @@ public class Controlador implements ActionListener {
 
 			//Pintar Grafico
 			
-
+			//Rellenamos los datos del grafico
 			DefaultCategoryDataset datosVotosRang = new DefaultCategoryDataset();
 			
 			datosVotosRang.setValue(pp, "PP \n Votos -> "+pp, "PP");
@@ -463,6 +486,8 @@ public class Controlador implements ActionListener {
 					true, 
 					true, 
 					false);
+			
+			//Aplicamos estilo al grafico
 			LegendTitle legend = iv.graficoRang.getLegend();
 			legend.setItemFont(new Font("Tahoma", Font.BOLD, 12));
 			
