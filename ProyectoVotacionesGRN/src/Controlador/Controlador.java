@@ -291,11 +291,14 @@ public class Controlador implements ActionListener {
 			
 			//Aplicamos estilo al grafico
 			
+			iv.graficoEsp.setTextAntiAlias(false); 
+			
 			PiePlot plot = (PiePlot) iv.graficoEsp.getPlot();
 			
 			LegendTitle legend = iv.graficoEsp.getLegend();
-				legend.setItemFont(new Font("Tahoma", Font.BOLD, 14));
-			
+				legend.setItemFont(new Font("Arial", Font.BOLD, 14));
+				legend.setBackgroundPaint(new Color(102, 205, 170));
+				
 			plot.setLabelGenerator(new StandardPieSectionLabelGenerator(
 					"{2}", NumberFormat.getNumberInstance(),
 					new DecimalFormat("0%")));
@@ -305,6 +308,7 @@ public class Controlador implements ActionListener {
 			plot.setSectionPaint(2, new Color(139,0,139));
 			plot.setSectionPaint(3, new Color(0,187,45));
 			
+			plot.setBackgroundPaint(new Color(102, 205, 170));
 			plot.setLabelFont(new Font("Tahoma", Font.BOLD, 14));
 		    iv.graficoEsp.setBackgroundPaint(new Color(102, 205, 170));
 			iv.panelGraficoEsp.setChart(iv.graficoEsp);	
@@ -386,7 +390,8 @@ public class Controlador implements ActionListener {
 			
 			//Aplicamos estilo al grafico
 			LegendTitle legend = iv.graficoCom.getLegend();
-			legend.setItemFont(new Font("Tahoma", Font.BOLD, 12));
+			legend.setItemFont(new Font("Arial", Font.BOLD, 12));
+			legend.setBackgroundPaint(new Color(102, 205, 170));
 			
 			CategoryPlot plot =(CategoryPlot) iv.graficoCom.getPlot();
 			BarRenderer renderer = (BarRenderer) plot.getRenderer();
@@ -489,7 +494,8 @@ public class Controlador implements ActionListener {
 			
 			//Aplicamos estilo al grafico
 			LegendTitle legend = iv.graficoRang.getLegend();
-			legend.setItemFont(new Font("Tahoma", Font.BOLD, 12));
+			legend.setItemFont(new Font("Arial", Font.BOLD, 12));
+			legend.setBackgroundPaint(new Color(102, 205, 170));
 			
 			CategoryPlot plot =(CategoryPlot) iv.graficoRang.getPlot();
 			BarRenderer renderer = (BarRenderer) plot.getRenderer();

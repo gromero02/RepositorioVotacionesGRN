@@ -28,6 +28,10 @@ import javax.swing.border.MatteBorder;
 import javax.swing.JComboBox;
 import java.awt.FlowLayout;
 import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.SoftBevelBorder;
+import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
 
 public class InterfazVotaciones extends JFrame {
 	
@@ -120,7 +124,7 @@ public class InterfazVotaciones extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 960, 731);
 		contentPane = new JPanel();
-		contentPane.setBackground(new Color(0, 0, 0));
+		contentPane.setBackground(Color.LIGHT_GRAY);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -165,7 +169,7 @@ public class InterfazVotaciones extends JFrame {
 		
 		botonMostrarPanelRs = new JButton("MOSTRAR");
 		botonMostrarPanelRs.setFont(new Font("Tahoma", Font.BOLD, 30));
-		botonMostrarPanelRs.setBounds(392, 570, 200, 80);
+		botonMostrarPanelRs.setBounds(372, 570, 200, 80);
 		botonMostrarPanelRs.setVisible(false);
 		panelinicio.add(botonMostrarPanelRs);
 		
@@ -236,7 +240,9 @@ public class InterfazVotaciones extends JFrame {
 		logoRangos2.setBounds(644, 480, 160, 163);
 		logoRangos2.setIcon(new ImageIcon("imgsVotaciones/rangosEdad2.png"));
 		panelMostrar.add(logoRangos2);
-	
+
+		
+		
 		panelRespaña = new JPanel();
 		panelRespaña.setBackground(new Color(102, 205, 170));
 		panelRespaña.setBounds(0, 0, 948, 690);
@@ -261,7 +267,7 @@ public class InterfazVotaciones extends JFrame {
 		ganadorREspaña = new JLabel("GANADOR");
 		ganadorREspaña.setHorizontalAlignment(SwingConstants.CENTER);
 		ganadorREspaña.setFont(new Font("Tahoma", Font.BOLD, 30));
-		ganadorREspaña.setBounds(636, 152, 200, 59);
+		ganadorREspaña.setBounds(640, 152, 200, 59);
 		ganadorREspaña.setVisible(false);
 		panelRespaña.add(ganadorREspaña);
 		
@@ -278,28 +284,32 @@ public class InterfazVotaciones extends JFrame {
 		panelRespaña.add(presidenteREspaña);
 		
 		fotoPresidenteREspaña = new JLabel("");
-		fotoPresidenteREspaña.setBounds(672, 426, 131, 220);
+		fotoPresidenteREspaña.setBounds(685, 419, 131, 220);
 		fotoPresidenteREspaña.setVisible(false);
-		fotoPresidenteREspaña.setBorder(new EmptyBorder(5, 5, 5, 5));
+		fotoPresidenteREspaña.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelRespaña.add(fotoPresidenteREspaña);
 		
 		panelGraficoEsp = new ChartPanel(graficoEsp);
 		panelGraficoEsp.setFont(new Font("Tahoma", Font.BOLD, 20));
-		panelGraficoEsp.setLocation(115, 136);
+		panelGraficoEsp.setLocation(148, 171);
 		panelGraficoEsp.setSize(490, 432);
 		panelGraficoEsp.setVisible(true);;
+		panelGraficoEsp.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		panelRespaña.add(panelGraficoEsp);
 		
 		botonatrasPREsp = new JButton("");
-		botonatrasPREsp.setBounds(10, 580, 100, 100);
+		botonatrasPREsp.setBounds(10, 570, 100, 100);
 		panelRespaña.add(botonatrasPREsp);
 		botonatrasPREsp.setBackground(new Color(102, 205, 170));
 		botonatrasPREsp.setIcon(new ImageIcon("imgsVotaciones/flecha.png"));
+		botonatrasPREsp.setBorder(null);
+
 		
 		panelRcom = new JPanel();
 		panelRcom.setBackground(new Color(102, 205, 170));
 		panelRcom.setBounds(0, 0, 948, 690);
 		contentPane.add(panelRcom);
+		panelRcom.setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		panelRcom.setLayout(null);
 		
 		tituloPanelRcom = new JLabel("RESULTADO POR COMUNIDADES");
@@ -318,7 +328,7 @@ public class InterfazVotaciones extends JFrame {
 		panelRcom.add(logoMapaCom2);
 		
 		panelRcomFiltroCom = new JPanel();
-		panelRcomFiltroCom.setBorder(new MatteBorder(2, 1, 2, 2, (Color) new Color(0, 0, 0)));
+		panelRcomFiltroCom.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelRcomFiltroCom.setBackground(new Color(102, 205, 170));
 		panelRcomFiltroCom.setBounds(194, 115, 543, 145);
 		panelRcom.add(panelRcomFiltroCom);
@@ -352,16 +362,17 @@ public class InterfazVotaciones extends JFrame {
 		panelRcom.add(logoGanadorRcom);
 		
 		panelGraficoCom = new ChartPanel(graficoCom);
-		panelGraficoCom.setLocation(189, 270);
-		panelGraficoCom.setSize(464, 392);
-		panelGraficoCom.setVisible(false);
+		panelGraficoCom.setBounds(215, 268, 464, 392);
 		panelRcom.add(panelGraficoCom);
+		panelGraficoCom.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
+		panelGraficoCom.setVisible(false);
 		
 		botonatrasPRCom = new JButton("");
-		botonatrasPRCom.setBounds(10, 580, 100, 100);
+		botonatrasPRCom.setBounds(10, 570, 100, 100);
 		panelRcom.add(botonatrasPRCom);
 		botonatrasPRCom.setIcon(new ImageIcon("imgsVotaciones/flecha.png"));
 		botonatrasPRCom.setBackground(new Color(102, 205, 170));
+		botonatrasPRCom.setBorder(null);
 		
 		panelRRang = new JPanel();
 		panelRRang.setBackground(new Color(102, 205, 170));
@@ -385,7 +396,7 @@ public class InterfazVotaciones extends JFrame {
 		panelRRang.add(logoPanelRRang2);
 		
 		panelRRangFiltro = new JPanel();
-		panelRRangFiltro.setBorder(new MatteBorder(2, 1, 2, 2, (Color) new Color(0, 0, 0)));
+		panelRRangFiltro.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelRRangFiltro.setBackground(new Color(102, 205, 170));
 		panelRRangFiltro.setBounds(180, 81, 572, 139);
 		panelRRang.add(panelRRangFiltro);
@@ -427,13 +438,15 @@ public class InterfazVotaciones extends JFrame {
 		panelGraficoRang.setLocation(185, 266);
 		panelGraficoRang.setSize(468, 396);
 		panelGraficoRang.setVisible(false);
+		panelGraficoRang.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		panelRRang.add(panelGraficoRang);
 		
 		botonatrasPRRang = new JButton("");
-		botonatrasPRRang.setBounds(10, 580, 100, 100);
+		botonatrasPRRang.setBounds(10, 570, 100, 100);
 		panelRRang.add(botonatrasPRRang);
 		botonatrasPRRang.setIcon(new ImageIcon("imgsVotaciones/flecha.png"));
 		botonatrasPRRang.setBackground(new Color(102, 205, 170));
+		botonatrasPRRang.setBorder(null);
 
 	}
 }
