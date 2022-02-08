@@ -309,7 +309,6 @@ public class InterfazVotaciones extends JFrame {
 		panelRcom.setBackground(new Color(102, 205, 170));
 		panelRcom.setBounds(0, 0, 948, 690);
 		contentPane.add(panelRcom);
-		panelRcom.setBorder(new LineBorder(new Color(0, 0, 0), 3));
 		panelRcom.setLayout(null);
 		
 		tituloPanelRcom = new JLabel("RESULTADO POR COMUNIDADES");
